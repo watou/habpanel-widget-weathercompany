@@ -1,0 +1,97 @@
+{
+    "template": "<!-- For more information goto: https://github.com/watou/habpanel-widget-weathercompany -->\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/weathercompany/weather-icons-master/css/weather-icons.css\">\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/weathercompany/weather-icons-master/css/weather-icons-wind.css\">\n<style>\n@media (min-width: 992px) {\n\t.col-md-border:not(:last-child) {\n\t\tborder-right: 1px solid #d7d7d7;\n\t}\n\t.col-left-border {\n\t\tborder-left: 1px solid #d7d7d7;\n\t\tmargin-left: -1px;\n\t\tmargin-right: 1px;\n\t}\n\t.wc-condition {\n\t\theight: 2em;\n\t\t}\n\t.wc-row-current {\n\t\tmargin: 1em 0em 2em;\n\t\t}\n\t.wc-row-detail-header {\n\t\tpadding-left: 5px;\n\t\tpadding-right: 5px;\n\t\tmargin-bottom: 0em;\n\t\t}\n\t.wc-row-detail-forecast {\n\t\tpadding-left: 5px;\n\t\tpadding-right: 5px;\n\t\tpadding-top: 0em;\n\t\tmargin-bottom: 1em;\n\t\t}\n\t.wc-row-forecast {\n\t\tmargin-bottom: 1em;\n\t\tmargin-top: 3em;\n\t\t}\n}\n</style>\n<div oc-lazy-load=\"['/static/weathercompany/wc.controller.js']\">\n\t<div ng-controller=\"ngWcCtrl\">\n\t\t<div ng-if=\"config.show_current\" class=\"row wc-row-current\">\n\t\t\t<div ng-if=\"config.show_current_temperature\" class=\"col-xs-3 col-md-border\">\n\t\t\t\t<h2>\n\t\t\t\t\t<i class=\"wi wi-thermometer\" ng-style=\"{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current \t== NULL) ? '3em' : config.icon_size_current + 'em' }\"></i>\n\t\t\t\t\t{{ WC_PWS_Temperature == NULL ? '' : '%.1f' | sprintf:WC_PWS_Temperature.split(' ')[0]}} {{WC_PWS_Temperature.split(' ')[1] }}\n\t\t\t\t</h2>\n\t\t\t\t<h5>{{ WC_PWS_TemperatureDewPoint == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureDewPoint.split(' ')[0]}} {{WC_PWS_TemperatureDewPoint.split(' ')[1] }} dewpoint</h5>\n\t\t\t\t<h5>{{ WC_PWS_TemperatureWindChill == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureWindChill.split(' ')[0]}} {{WC_PWS_TemperatureWindChill.split(' ')[1] }} chill /\n\t\t\t\t\t  {{ WC_PWS_TemperatureHeatIndex == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureHeatIndex.split(' ')[0]}} {{WC_PWS_TemperatureHeatIndex.split(' ')[1] }} heat\n\t\t\t\t</h5>\n    \t</div>\n\t\t\t<div ng-if=\"config.show_current_wind\" class=\"col-xs-3 col-md-border\">\n\t\t\t\t<h2>\n\t\t\t\t\t<i ng-class=\"['wi', 'wi-wind-beaufort-'+(WC_PWS_WindSpeed == NULL ? '0' : '%.0f' | sprintf:beaufortFromWindSpeed(WC_PWS_WindSpeed))]\" \n\t\t\t\t\t\t ng-style=\"{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current \t== NULL) ? '3em' : config.icon_size_current + 'em' }\">\n\t\t\t\t\t</i>\n\t\t\t\t\t<i ng-class=\"['wi', 'wi-wind', 'from-'+(WC_PWS_WindDirection == NULL ? '0' : '%.0f' | sprintf:WC_PWS_WindDirection.split(' ')[0])+'-deg']\" \n\t\t\t\t\t\t ng-style=\"{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current \t== NULL) ? '3em' : config.icon_size_current + 'em' }\">\n\t\t\t\t\t</i>\n\t\t\t\t</h2>\n\t\t\t\t<h5>{{ WC_PWS_WindSpeed == NULL ? '' : '%.0f' | sprintf:WC_PWS_WindSpeed.split(' ')[0]}} {{WC_PWS_WindSpeed.split(' ')[1] }} from {{ degreeToCompass(WC_PWS_WindDirection) }} ({{WC_PWS_WindDirection}})</h5>\n\t\t\t\t<h5>Gusting to {{ WC_PWS_WindSpeedGust == NULL ? '' : '%.0f' | sprintf:WC_PWS_WindSpeedGust.split(' ')[0]}} {{WC_PWS_WindSpeedGust.split(' ')[1] }}</h5>\n\t\t\t</div>\n\t\t\t<div ng-if=\"config.show_current_precipitation\" class=\"col-xs-3 col-md-border\">\n\t\t\t\t<h2>\n\t\t\t\t\t<i class=\"wi wi-raindrops\" ng-style=\"{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current \t== NULL) ? '3em' : config.icon_size_current + 'em' }\"></i>\n\t\t\t\t\t{{ WC_PWS_PrecipitationRate == NULL ? '' : '%.2f' | sprintf:WC_PWS_PrecipitationRate.split(' ')[0]}} {{WC_PWS_PrecipitationRate.split(' ')[1] }}\n\t\t\t\t</h2>\n\t\t\t\t<h5>{{ WC_PWS_PrecipitationTotal == NULL ? '' : '%.2f' | sprintf:WC_PWS_PrecipitationTotal.split(' ')[0]}} {{WC_PWS_PrecipitationTotal.split(' ')[1] }}&nbsp;</h5>\n\t\t\t\t<h5>&nbsp;</h5>\n\t\t\t</div>\n\t\t\t<div ng-if=\"config.show_current_pressure\" class=\"col-xs-3 col-md-border\">\n\t\t\t\t<h2>\n\t\t\t\t\t<i class=\"wi wi-barometer\" ng-style=\"{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current \t== NULL) ? '3em' : config.icon_size_current + 'em' }\"></i>\n\t\t\t\t\t{{ WC_PWS_Pressure == NULL ? '' : '%.2f' | sprintf:WC_PWS_Pressure.split(' ')[0]}} {{WC_PWS_Pressure.split(' ')[1] }}\n\t\t\t\t</h2>\n\t\t\t\t<h5>{{ WC_PWS_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:WC_PWS_RelativeHumidity.split(' ')[0]}} <i class=\"wi wi-humidity\"></i></h5>\n\t\t\t\t<h5 ng-if=\"config.show_current_station_id\">{{ WC_PWS_StationId }} @ {{ WC_PWS_ObservationTimeLocal | date: 'HH:mm' }}</h5>\n\t\t\t</div>\n\t\t</div>\n\t\t<div ng-if=\"config.show_forecast\" class=\"row wc-row-forecast\">\n\t\t\t<div ng-repeat=\"day in WC_Day\" ng-class=\"['col-xs-'+(12 / config.forecast_days), 'col-md-border']\">\n\t\t\t\t<h4>{{ day.DayOfWeek }}</h4>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div ng-if=\"day.Day_WxPhraseLong != 'UNDEF'\" class=\"col-xs-6\">\n\t\t\t\t\t\t<img class=\"img-responsive\" src=\"{{ day.Day_IconImage }}\">\n\t\t\t\t\t\t<h5 class=\"wc-condition\">\n\t\t\t\t\t\t\t{{ day.Day_WxPhraseLong }}<br>\n\t\t\t\t\t\t\t<i class=\"wi wi-raindrop\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == \tNULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Day_PrecipitationChance }} {{ day.Day_PrecipitationRain }}<br>\n\t\t\t\t\t\t\t<i class=\"wi wi-thermometer\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast \t== NULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Day_Temperature == NULL ? '' : '%.0f' | sprintf:day.Day_Temperature.split(' ')[0]}} \t{{day.Day_Temperature.split(' ')[1]}}\n\t\t\t\t\t\t\t<i class=\"wi wi-humidity\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == \tNULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Day_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:day.Day_RelativeHumidity.split(' ')[0]}} \n\t\t\t\t\t\t</h5>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div ng-if=\"day.Night_WxPhraseLong != 'UNDEF'\" ng-class=\"day.Day_WxPhraseLong == 'UNDEF' ? 'col-xs-6 col-xs-offset-6' : 'col-xs-6'\">\n\t\t\t\t\t\t<img class=\"img-responsive\" src=\"{{ day.Night_IconImage }}\">\n\t\t\t\t\t\t<h5 class=\"wc-condition\">\n\t\t\t\t\t\t\t{{ day.Night_WxPhraseLong }}<br>\n\t\t\t\t\t\t\t<i class=\"wi wi-raindrop\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == \tNULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Night_PrecipitationChance }} {{ day.Night_PrecipitationRain }}<br>\n\t\t\t\t\t\t\t<i class=\"wi wi-thermometer\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast \t== NULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Night_Temperature == NULL ? '' : '%.0f' | sprintf:day.Night_Temperature.split(' ')[0]}} \t{{day.Night_Temperature.split(' ')[1]}}\n\t\t\t\t\t\t\t<i class=\"wi wi-humidity\" ng-style=\"{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == \tNULL) ? '3em' : config.icon_size_forecast + 'em' }\"></i> {{ day.Night_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:day.Night_RelativeHumidity.split(' ')[0]}}\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n",
+    "name": "WeatherCompany",
+    "author": "John Cocula",
+    "description": "Widget for WeatherCompany binding - https://github.com/watou/habpanel-widget-weathercompany",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "show_current",
+            "label": "Current observations",
+            "default": true,
+            "description": "Show current observations"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_current_station_id",
+            "label": "Weather station ID",
+            "default": true,
+            "description": "Show weather station ID"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_current_temperature",
+            "label": "Show current temperature",
+            "default": true,
+            "description": "Show current temperature"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_current_wind",
+            "label": "Show current wind",
+            "default": true,
+            "description": "Show current wind"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_current_precipitation",
+            "label": "Show current precipitation",
+            "default": true,
+            "description": "Show current precipitation"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_current_pressure",
+            "label": "Show current pressure",
+            "default": true,
+            "description": "Show current pressure"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_forecast",
+            "label": "daily forecast",
+            "default": true,
+            "description": "Show daily forecast for the next N days"
+        },
+        {
+            "type": "choice",
+            "id": "forecast_days",
+            "label": "number of forecast days",
+            "default": "4",
+            "description": "Number of days to show in forecast",
+            "choices": "1,2,3,4,6"
+        },
+        {
+            "type": "choice",
+            "id": "icon_size_current",
+            "label": "Icon size - Observations",
+            "default": "3",
+            "description": "Size of icon for current weather condition",
+            "choices": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,16,19,20"
+        },
+        {
+            "type": "color",
+            "id": "icon_color_current",
+            "label": "Icon color - Observations",
+            "default": "",
+            "description": "Color of icon for current observations"
+        },
+        {
+            "type": "choice",
+            "default": "1",
+            "description": "Size of icons for daily forecasts",
+            "id": "icon_size_forecast",
+            "label": "Icon size - Forecast",
+            "choices": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,16,19,20"
+        },
+        {
+            "type": "color",
+            "id": "icon_color_forecast",
+            "label": "Icon color - Forecast",
+            "description": "Color of forecast condition icons",
+            "default": ""
+        }
+    ],
+    "source_url": "https://raw.githubusercontent.com/watou/habpanel-widget-weathercompany/master/Local%20Weather%20-%20WeatherCompany.widget.json",
+    "readme_url": "https://github.com/watou/habpanel-widget-weathercompany"
+}

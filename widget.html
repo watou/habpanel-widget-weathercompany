@@ -1,0 +1,105 @@
+<!-- For more information goto: https://github.com/watou/habpanel-widget-weathercompany -->
+<link rel="stylesheet" type="text/css" href="/static/weathercompany/weather-icons-master/css/weather-icons.css">
+<link rel="stylesheet" type="text/css" href="/static/weathercompany/weather-icons-master/css/weather-icons-wind.css">
+<style>
+@media (min-width: 992px) {
+	.col-md-border:not(:last-child) {
+		border-right: 1px solid #d7d7d7;
+	}
+	.col-left-border {
+		border-left: 1px solid #d7d7d7;
+		margin-left: -1px;
+		margin-right: 1px;
+	}
+	.wc-condition {
+		height: 2em;
+		}
+	.wc-row-current {
+		margin: 1em 0em 2em;
+		}
+	.wc-row-detail-header {
+		padding-left: 5px;
+		padding-right: 5px;
+		margin-bottom: 0em;
+		}
+	.wc-row-detail-forecast {
+		padding-left: 5px;
+		padding-right: 5px;
+		padding-top: 0em;
+		margin-bottom: 1em;
+		}
+	.wc-row-forecast {
+		margin-bottom: 1em;
+		margin-top: 3em;
+		}
+}
+</style>
+<div oc-lazy-load="['/static/weathercompany/wc.controller.js']">
+	<div ng-controller="ngWcCtrl">
+		<div ng-if="config.show_current" class="row wc-row-current">
+			<div ng-if="config.show_current_temperature" class="col-xs-3 col-md-border">
+				<h2>
+					<i class="wi wi-thermometer" ng-style="{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current 	== NULL) ? '3em' : config.icon_size_current + 'em' }"></i>
+					{{ WC_PWS_Temperature == NULL ? '' : '%.1f' | sprintf:WC_PWS_Temperature.split(' ')[0]}} {{WC_PWS_Temperature.split(' ')[1] }}
+				</h2>
+				<h5>{{ WC_PWS_TemperatureDewPoint == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureDewPoint.split(' ')[0]}} {{WC_PWS_TemperatureDewPoint.split(' ')[1] }} dewpoint</h5>
+				<h5>{{ WC_PWS_TemperatureWindChill == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureWindChill.split(' ')[0]}} {{WC_PWS_TemperatureWindChill.split(' ')[1] }} chill /
+					  {{ WC_PWS_TemperatureHeatIndex == NULL ? '' : '%.1f' | sprintf:WC_PWS_TemperatureHeatIndex.split(' ')[0]}} {{WC_PWS_TemperatureHeatIndex.split(' ')[1] }} heat
+				</h5>
+    	</div>
+			<div ng-if="config.show_current_wind" class="col-xs-3 col-md-border">
+				<h2>
+					<i ng-class="['wi', 'wi-wind-beaufort-'+(WC_PWS_WindSpeed == NULL ? '0' : '%.0f' | sprintf:beaufortFromWindSpeed(WC_PWS_WindSpeed))]" 
+						 ng-style="{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current 	== NULL) ? '3em' : config.icon_size_current + 'em' }">
+					</i>
+					<i ng-class="['wi', 'wi-wind', 'from-'+(WC_PWS_WindDirection == NULL ? '0' : '%.0f' | sprintf:WC_PWS_WindDirection.split(' ')[0])+'-deg']" 
+						 ng-style="{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current 	== NULL) ? '3em' : config.icon_size_current + 'em' }">
+					</i>
+				</h2>
+				<h5>{{ WC_PWS_WindSpeed == NULL ? '' : '%.0f' | sprintf:WC_PWS_WindSpeed.split(' ')[0]}} {{WC_PWS_WindSpeed.split(' ')[1] }} from {{ degreeToCompass(WC_PWS_WindDirection) }} ({{WC_PWS_WindDirection}})</h5>
+				<h5>Gusting to {{ WC_PWS_WindSpeedGust == NULL ? '' : '%.0f' | sprintf:WC_PWS_WindSpeedGust.split(' ')[0]}} {{WC_PWS_WindSpeedGust.split(' ')[1] }}</h5>
+			</div>
+			<div ng-if="config.show_current_precipitation" class="col-xs-3 col-md-border">
+				<h2>
+					<i class="wi wi-raindrops" ng-style="{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current 	== NULL) ? '3em' : config.icon_size_current + 'em' }"></i>
+					{{ WC_PWS_PrecipitationRate == NULL ? '' : '%.2f' | sprintf:WC_PWS_PrecipitationRate.split(' ')[0]}} {{WC_PWS_PrecipitationRate.split(' ')[1] }}
+				</h2>
+				<h5>{{ WC_PWS_PrecipitationTotal == NULL ? '' : '%.2f' | sprintf:WC_PWS_PrecipitationTotal.split(' ')[0]}} {{WC_PWS_PrecipitationTotal.split(' ')[1] }}&nbsp;</h5>
+				<h5>&nbsp;</h5>
+			</div>
+			<div ng-if="config.show_current_pressure" class="col-xs-3 col-md-border">
+				<h2>
+					<i class="wi wi-barometer" ng-style="{ 'color' : (config.icon_color_current == NULL) ? primary-color : config.icon_color_current, 'font-size' : (config.icon_size_current 	== NULL) ? '3em' : config.icon_size_current + 'em' }"></i>
+					{{ WC_PWS_Pressure == NULL ? '' : '%.2f' | sprintf:WC_PWS_Pressure.split(' ')[0]}} {{WC_PWS_Pressure.split(' ')[1] }}
+				</h2>
+				<h5>{{ WC_PWS_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:WC_PWS_RelativeHumidity.split(' ')[0]}} <i class="wi wi-humidity"></i></h5>
+				<h5 ng-if="config.show_current_station_id">{{ WC_PWS_StationId }} @ {{ WC_PWS_ObservationTimeLocal | date: 'HH:mm' }}</h5>
+			</div>
+		</div>
+		<div ng-if="config.show_forecast" class="row wc-row-forecast">
+			<div ng-repeat="day in WC_Day" ng-class="['col-xs-'+(12 / config.forecast_days), 'col-md-border']">
+				<h4>{{ day.DayOfWeek }}</h4>
+				<div class="row">
+					<div ng-if="day.Day_WxPhraseLong != 'UNDEF'" class="col-xs-6">
+						<img class="img-responsive" src="{{ day.Day_IconImage }}">
+						<h5 class="wc-condition">
+							{{ day.Day_WxPhraseLong }}<br>
+							<i class="wi wi-raindrop" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == 	NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Day_PrecipitationChance }} {{ day.Day_PrecipitationRain }}<br>
+							<i class="wi wi-thermometer" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast 	== NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Day_Temperature == NULL ? '' : '%.0f' | sprintf:day.Day_Temperature.split(' ')[0]}} 	{{day.Day_Temperature.split(' ')[1]}}
+							<i class="wi wi-humidity" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == 	NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Day_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:day.Day_RelativeHumidity.split(' ')[0]}} 
+						</h5>
+					</div>
+					<div ng-if="day.Night_WxPhraseLong != 'UNDEF'" ng-class="day.Day_WxPhraseLong == 'UNDEF' ? 'col-xs-6 col-xs-offset-6' : 'col-xs-6'">
+						<img class="img-responsive" src="{{ day.Night_IconImage }}">
+						<h5 class="wc-condition">
+							{{ day.Night_WxPhraseLong }}<br>
+							<i class="wi wi-raindrop" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == 	NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Night_PrecipitationChance }} {{ day.Night_PrecipitationRain }}<br>
+							<i class="wi wi-thermometer" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast 	== NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Night_Temperature == NULL ? '' : '%.0f' | sprintf:day.Night_Temperature.split(' ')[0]}} 	{{day.Night_Temperature.split(' ')[1]}}
+							<i class="wi wi-humidity" ng-style="{ 'color' : (config.icon_color_forecast == NULL) ? primary-color : config.icon_color_forecast, 'font-size' : (config.icon_size_forecast == 	NULL) ? '3em' : config.icon_size_forecast + 'em' }"></i> {{ day.Night_RelativeHumidity  == NULL ? '' : '%.0f' | sprintf:day.Night_RelativeHumidity.split(' ')[0]}}
+						</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
